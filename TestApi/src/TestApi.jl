@@ -1,16 +1,16 @@
 module TestApi
-using HTTP, JSON3, Sockets
+using HTTP, Sockets
 
-greet() = print("Hello World!")
+health(req::HTTP.Request) = HTTP.Response(204)
 
-function health()
-    return HTTP.Response(204)
-end
+greet() = println("Hello from a test web api!")
+
+const ROUTER = HTTP.Router()
 
 function main()
-    const ROUTER = HTTP.Router()
+    greet()
     HTTP.register!(ROUTER, "GET", "/health", health)
-    HTTP.serve!(ROUTER, Sockets.localhost, 8080)
+    HTTP.serve(ROUTER, Sockets.localhost, 8080) # TODO: Add graceful shutdown
 end
 
 end # module TestApi
